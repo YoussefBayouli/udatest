@@ -41,6 +41,19 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
 
+  test-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: ["frontend-build"]  # -<< pipeline.id >>"
+      - run:
+          name: Font-end test
+          command: |
+            cd frontend
+            npm run test       
+
  
             
 workflows:
@@ -48,3 +61,5 @@ workflows:
     jobs:
       - build-frontend
       - build-backend
+      - test-frontend:
+          requires: [build-frontend]
